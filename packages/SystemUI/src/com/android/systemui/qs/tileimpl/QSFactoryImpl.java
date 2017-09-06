@@ -48,6 +48,7 @@ import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.SyncTile;
+import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.UiModeNightTile;
 import com.android.systemui.qs.tiles.UserTile;
 import com.android.systemui.qs.tiles.WifiTile;
@@ -87,6 +88,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<DataSwitchTile> mDataSwitchTileProvider;
     private final Provider<GamingModeTile> mGamingModeTileProvider;
     private final Provider<AODTile> mAODTileProvider;
+    private final Provider<ScreenshotTile> mScreenshotTileProvider;
 
     private QSTileHost mHost;
 
@@ -114,7 +116,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<SyncTile> syncTileProvider,
             Provider<DataSwitchTile> dataSwitchTileProvider,
             Provider<GamingModeTile> gamingModeTileProvider,
-            Provider<AODTile> aodTileProvider) {
+            Provider<AODTile> aodTileProvider,
+            Provider<ScreenshotTile> screenshotTileProvider) {
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
         mCellularTileProvider = cellularTileProvider;
@@ -139,6 +142,7 @@ public class QSFactoryImpl implements QSFactory {
         mDataSwitchTileProvider = dataSwitchTileProvider;
         mGamingModeTileProvider = gamingModeTileProvider;
         mAODTileProvider = aodTileProvider;
+        mScreenshotTileProvider = screenshotTileProvider;
     }
 
     public void setHost(QSTileHost host) {
@@ -206,6 +210,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mGamingModeTileProvider.get();
             case "aod":
                 return mAODTileProvider.get();
+            case "screenshot":
+                return mScreenshotTileProvider.get();
         }
 
         // Intent tiles.
