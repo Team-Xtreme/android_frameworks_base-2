@@ -111,4 +111,7 @@
    <!-- Themes -->
    <java-symbol type="color" name="theme_generic_semi_transparent_color" />
 
+  <!-- Seconds after which power button torch times out when proximity sensor is covered -->
+  <java-symbol type="integer" name="config_flashlightProximityTimeout" />
+
 </resources>
