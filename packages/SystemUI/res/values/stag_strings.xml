@@ -169,4 +169,8 @@
     <string name="screenrecord_stopdot_label">Show stop dot</string>
     <string name="screenrecord_low_quality_label">Low quality</string>
     <string name="global_action_screenshot_cust">Screenshot/Rec</string>
+
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
 </resources>
