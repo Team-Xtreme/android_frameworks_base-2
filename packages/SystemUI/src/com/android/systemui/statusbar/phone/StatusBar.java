@@ -561,6 +561,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     protected NotificationRemoteInputManager mRemoteInputManager;
 
     private VisualizerView mVisualizerView;
+    // LS visualizer on Ambient Display
+    private boolean mAmbientVisualizer;
 
     private boolean mWallpaperSupportsAmbientMode;
     private final BroadcastReceiver mWallpaperChangedReceiver = new BroadcastReceiver() {
@@ -3964,8 +3966,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 BiometricUnlockController.MODE_WAKE_AND_UNLOCK) {
             dozing = false;
         }
-
         mStatusBarStateController.setIsDozing(dozing);
+
+        if (mAmbientVisualizer && mDozing) {
+            mVisualizerView.setVisible(true);
+        }
     }
 
     private void updateKeyguardState() {
@@ -4261,9 +4266,16 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.GAMING_MODE_HEADSUP_TOGGLE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.AMBIENT_VISUALIZER_ENABLED),
+                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.AMBIENT_VISUALIZER_ENABLED))) {
+                setAmbientVis();
+            }
             update();
         }
 
@@ -4279,7 +4291,14 @@ public class StatusBar extends SystemUI implements DemoMode,
         	    UserHandle.USER_CURRENT) != 0;
             TelephonyIcons.updateIcons(USE_OLD_MOBILETYPE);
             setGamingMode();
+            setAmbientVis();
         }
+    }
+
+    private void setAmbientVis() {
+        mAmbientVisualizer = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.AMBIENT_VISUALIZER_ENABLED, 0,
+                UserHandle.USER_CURRENT) == 1;
     }
 
     private void setScreenBrightnessMode() {
