@@ -5584,6 +5584,15 @@ public final class Settings {
         public static final String HAPTIC_ON_ACTION_KEY = "haptic_on_action_key";
 
         /**
+         * Whether the Home button works during call
+         * @hide
+         */
+        public static final String ALLOW_INCALL_HOME = "allow_incall_home";
+
+        /** @hide */
+        private static final Validator ALLOW_INCALL_HOME_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5719,6 +5728,7 @@ public final class Settings {
             OMNI_QS_QUICKBAR_COLUMNS,
             SCREENSHOT_TYPE,
             SWAP_VOLUME_BUTTONS,
+            ALLOW_INCALL_HOME,
         };
 
         /**
@@ -5914,6 +5924,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OMNI_QS_QUICKBAR_COLUMNS);
             PRIVATE_SETTINGS.add(SCREENSHOT_TYPE);
             PRIVATE_SETTINGS.add(SWAP_VOLUME_BUTTONS);
+            PRIVATE_SETTINGS.add(ALLOW_INCALL_HOME);
         }
 
 
@@ -6087,6 +6098,7 @@ public final class Settings {
             VALIDATORS.put(OMNI_QS_LAYOUT_ROWS_LANDSCAPE, OMNI_QS_LAYOUT_ROWS_LANDSCAPE_VALIDATOR);
             VALIDATORS.put(SCREENSHOT_TYPE, SCREENSHOT_TYPE_VALIDATOR);
             VALIDATORS.put(SWAP_VOLUME_BUTTONS, SWAP_VOLUME_BUTTONS_VALIDATOR);
+            VALIDATORS.put(ALLOW_INCALL_HOME, ALLOW_INCALL_HOME_VALIDATOR);
         }
 
         /**
