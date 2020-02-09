@@ -99,8 +99,4 @@
 
     <!-- Whether device ignores the RSSNR signal implementation -->
     <bool name="config_ignoreRssnrSignalLevel">false</bool>
-
-    <!-- Seconds after which power button torch times out when proximity sensor is covered -->
-    <integer name="config_flashlightProximityTimeout">300</integer>
-
 </resources>
