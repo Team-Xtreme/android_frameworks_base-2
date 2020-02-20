@@ -494,13 +494,6 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         }
     };
 
-    private void updateSettings() {
-        final Resources res = mContext.getResources();
-        mHeaderImageEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
-                UserHandle.USER_CURRENT) == 1;
-    }
-
     public void updateSettings() {
         final Resources res = mContext.getResources();
         boolean isPortrait = res.getConfiguration().orientation
@@ -527,6 +520,9 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mLayout.setSpanCount(isPortrait ? columns : columnsLandscape);
         updateColumnsMenu(defaultColumns);
         updateRowsMenu();
+        mHeaderImageEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
+                UserHandle.USER_CURRENT) == 1;
     }
 
     private void updateColumnsMenu(int defaultColumns) {
