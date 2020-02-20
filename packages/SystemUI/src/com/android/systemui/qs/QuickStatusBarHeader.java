@@ -466,13 +466,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryRemainingIcon.updateVisibility();
     }
 
-    private void updateQSClock() {
-        int show = Settings.System.getInt(mContext.getContentResolver(),
-        Settings.System.SHOW_QS_CLOCK, 1);
-        mClockView.setClockVisibleByUser(show == 1);
->>>>>>> 54f76e437cd... Add battery styles and customizations for Android 10 [1/2]
-    }
-
     private void updateStatusIconAlphaAnimator() {
         mStatusIconsAlphaAnimator = new TouchAnimator.Builder()
                 .addFloat(mQuickQsStatusIcons, "alpha", 1, 0, 0)
