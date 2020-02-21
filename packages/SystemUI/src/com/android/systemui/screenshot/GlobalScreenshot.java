@@ -536,7 +536,7 @@ class GlobalScreenshot {
 
     private AsyncTask<Void, Void, Void> mSaveInBgTask;
 
-    private Ringtone  mScreenshotSound;
+    private MediaActionSound mCameraSound;
 
 
     /**
@@ -604,9 +604,9 @@ class GlobalScreenshot {
         mPreviewWidth = panelWidth;
         mPreviewHeight = r.getDimensionPixelSize(R.dimen.notification_max_height);
 
-        // Setup the Screenshot sound
-        mScreenshotSound= RingtoneManager.getRingtone(mContext,
-                    Uri.parse("file://" + "/system/media/audio/ui/camera_click.ogg"));
+        // Setup the Camera shutter sound
+        mCameraSound = new MediaActionSound();
+        mCameraSound.load(MediaActionSound.SHUTTER_CLICK);
     }
 
     /**
