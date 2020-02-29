@@ -2052,7 +2052,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.OMNI_QS_TILE_TITLE_VISIBILITY),
                     false, this, UserHandle.USER_ALL);
-
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.Secure.AMBIENT_VISUALIZER_ENABLED),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.FORCE_SHOW_NAVBAR),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2067,12 +2072,37 @@ public class StatusBar extends SystemUI implements DemoMode,
                     uri.equals(Settings.System.getUriFor(Settings.System.OMNI_QS_QUICKBAR_COLUMNS)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.OMNI_QS_TILE_TITLE_VISIBILITY))) {
                 setQsRowsColumns();
+            } else if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.AMBIENT_VISUALIZER_ENABLED))) {
+                setAmbientVis();
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.FORCE_SHOW_NAVBAR))) {
+                updateNavigationBarVisibility();
             }
         }
 
         public void update() {
             setFpToDismissNotifications();
             setQsRowsColumns();
+            setAmbientVis();
+            updateNavigationBarVisibility();
+        }
+    }
+
+    private void updateNavigationBarVisibility() {
+        if (mDisplayId == Display.DEFAULT_DISPLAY && mWindowManagerService != null) {
+            boolean forcedVisibility = mNeedsNavigationBar || Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.FORCE_SHOW_NAVBAR,
+                 0, UserHandle.USER_CURRENT) == 1;
+            boolean hasNavbar = getNavigationBarView() != null;
+            if (forcedVisibility) {
+                if (!hasNavbar) {
+                    mNavigationBarController.onDisplayReady(mDisplayId,
+                            mNavigationBarSystemUiVisibility);
+                }
+            } else {
+                if (hasNavbar) {
+                    mNavigationBarController.onDisplayRemoved(mDisplayId);
+                }
+            }
         }
     }
 
@@ -2088,6 +2118,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             mQSPanel.updateSettings();
             mQuickQSPanel.updateSettings();
         }
+    }
+
+    private void setAmbientVis() {
+        mAmbientVisualizer = Settings.Secure.getIntForUser(
+                mContext.getContentResolver(), Settings.Secure.AMBIENT_VISUALIZER_ENABLED, 0,
+                UserHandle.USER_CURRENT)
     }
 
     /**
@@ -4289,20 +4325,11 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.GAMING_MODE_HEADSUP_TOGGLE),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.Secure.AMBIENT_VISUALIZER_ENABLED),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.FORCE_SHOW_NAVBAR),
-                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
-            if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.AMBIENT_VISUALIZER_ENABLED))) {
-                setAmbientVis();
-            } else if (uri.equals(Settings.System.getUriFor(Settings.System.FORCE_SHOW_NAVBAR))) {
-                updateNavigationBarVisibility();
+            update();
             }
         }
 
@@ -4318,12 +4345,10 @@ public class StatusBar extends SystemUI implements DemoMode,
         	    UserHandle.USER_CURRENT) != 0;
             TelephonyIcons.updateIcons(USE_OLD_MOBILETYPE);
             setGamingMode();
-            setAmbientVis();
-            updateNavigationBarVisibility();
         }
     }
 
-    private void updateNavigationBarVisibility() {
+/*    private void updateNavigationBarVisibility() {
         if (mDisplayId == Display.DEFAULT_DISPLAY && mWindowManagerService != null) {
             boolean forcedVisibility = Settings.System.getIntForUser(
                 mContext.getContentResolver(), Settings.System.FORCE_SHOW_NAVBAR,
@@ -4346,7 +4371,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mAmbientVisualizer = Settings.Secure.getIntForUser(
                 mContext.getContentResolver(), Settings.Secure.AMBIENT_VISUALIZER_ENABLED, 0,
                 UserHandle.USER_CURRENT) == 1;
-    }
+    }*/
 
     private void setScreenBrightnessMode() {
         int mode = Settings.System.getIntForUser(mContext.getContentResolver(),
